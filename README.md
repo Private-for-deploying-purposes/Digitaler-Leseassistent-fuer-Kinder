@@ -1,10 +1,13 @@
 # Digitaler-Leseassistent-fuer-Kinder-
 WWI22DSA/B Natural Language Processing (Aktuelle Data Science-Entwicklungen I)
 
-Digitaler Leseassistent für Kinder: Ein interaktives Tool zur Unterstützung beim Lesen
+Digitaler Leseassistent für Kinder: 
+Ein interaktives Tool zur Unterstützung beim Lesen
+
 
 Beschreibung:
 Wir möchten ein Tool entwickeln, das Kinder beim Lesen unterstützt. Oft stoßen sie auf Wörter, die sie nicht verstehen, oder haben Fragen zu einem Text, die sie ohne Hilfe nicht beantworten können. Unser Projekt soll genau hier helfen.
+
 
 Der Plan ist, einen interaktiven Leseassistenten zu bauen, der:
 
