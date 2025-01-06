@@ -2,7 +2,7 @@ from transformers import AutoModelForTokenClassification, AutoTokenizer, Trainer
 from datasets import load_dataset
 
 # Lade und tokenisiere das Dataset
-dataset = load_dataset("path_to_your_dataset")
+dataset = load_dataset("Pfad zum Dataset")
 tokenizer = AutoTokenizer.from_pretrained("bert-base-uncased")
 
 def tokenize_and_align_labels(examples):
