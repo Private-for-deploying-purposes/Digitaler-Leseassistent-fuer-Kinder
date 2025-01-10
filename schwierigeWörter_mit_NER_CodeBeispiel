@@ -1,41 +1,76 @@
-from transformers import AutoModelForTokenClassification, AutoTokenizer, Trainer, TrainingArguments
-from datasets import load_dataset
+import spacy
+import pandas as pd
 
-# Lade und tokenisiere das Dataset
-dataset = load_dataset("Pfad zum Dataset")
-tokenizer = AutoTokenizer.from_pretrained("bert-base-uncased")
+# Lade das deutsche NER-Modell
+nlp = spacy.load("de_core_news_sm")
 
-def tokenize_and_align_labels(examples):
-    tokenized_inputs = tokenizer(examples["text"], truncation=True, is_split_into_words=True)
-    labels = []
-    for i, label in enumerate(examples[f"labels"]):
-        word_ids = tokenized_inputs.word_ids(batch_index=i)
-        label_ids = [-100 if word_id is None else label[word_id] for word_id in word_ids]
-        labels.append(label_ids)
-    tokenized_inputs["labels"] = labels
-    return tokenized_inputs
+# Funktion zum Laden des Grundwortschatzes
+def load_grundwortschatz(file_path):
+    try:
+        with open(file_path, "r", encoding="utf-8") as f:
+            words = [line.strip().lower() for line in f if line.strip()]
+        return set(words)  # Set für schnelleren Vergleich
+    except Exception as e:
+        print(f"Fehler beim Laden der Grundwortschatz-Datei: {e}")
+        return set()
 
-tokenized_datasets = dataset.map(tokenize_and_align_labels, batched=True)
+# Funktion zur Erkennung schwieriger Wörter
+def erkenne_schwere_wörter(text, grundwortschatz):
+    # Text mit SpaCy verarbeiten
+    doc = nlp(text)
 
-# Lade das Modell
-model = AutoModelForTokenClassification.from_pretrained("bert-base-uncased", num_labels=number_of_labels)
+    # Listen für Ergebnisse
+    grundwörter = []
+    schwierige_wörter = []
 
-# Trainingsparameter
-training_args = TrainingArguments(
-    output_dir="./results",
-    evaluation_strategy="epoch",
-    learning_rate=2e-5,
-    per_device_train_batch_size=16,
-    num_train_epochs=3,
-    weight_decay=0.01,
-)
+    # Wörter prüfen
+    for token in doc:
+        if token.is_alpha:  # Nur Wörter, keine Satzzeichen
+            wort = token.text.lower()
+            if wort in grundwortschatz:
+                grundwörter.append(wort)
+            else:
+                schwierige_wörter.append(wort)
 
-# Trainer initialisieren
-trainer = Trainer(
-    model=model,
-    args=training_args,
-    train_dataset=tokenized_datasets["train"],
-    eval_dataset=tokenized_datasets["test"],
-)
+    return grundwörter, schwierige_wörter
 
-trainer.train()
+# Funktion zur Verarbeitung des hochgeladenen Datasets
+def verarbeite_dataset(file_path, grundwortschatz_path):
+    # Lade den Grundwortschatz
+    grundwortschatz = load_grundwortschatz(grundwortschatz_path)
+
+    # Lade die hochgeladenen Texte
+    try:
+        if file_path.endswith(".txt"):
+            with open(file_path, "r", encoding="utf-8") as f:
+                text = f.read()
+        elif file_path.endswith(".csv"):
+            df = pd.read_csv(file_path)
+            text = " ".join(df.iloc[:, 0].astype(str))  # Annahme: Text ist in der ersten Spalte
+        elif file_path.endswith(".json"):
+            df = pd.read_json(file_path)
+            text = " ".join(df.iloc[:, 0].astype(str))
+        else:
+            raise ValueError("Nur .txt, .csv oder .json Dateien werden unterstützt.")
+    except Exception as e:
+        return f"Fehler beim Laden der Datei: {e}"
+
+    # Schwierige Wörter erkennen
+    grundwörter, schwierige_wörter = erkenne_schwere_wörter(text, grundwortschatz)
+    return grundwörter, schwierige_wörter
+
+# Hauptprogramm
+if __name__ == "__main__":
+    # Beispielpfade
+    dataset_path = "kindertexte.txt"  # Muss ich noch durch tatsächlichen Pfad erstezten
+    grundwortschatz_path = "grundwortschatz.txt"
+
+    # Verarbeite das Dataset
+    ergebnisse = verarbeite_dataset(dataset_path, grundwortschatz_path)
+
+    if isinstance(ergebnisse, tuple):  # Wenn keine Fehler auftraten
+        grundwörter, schwierige_wörter = ergebnisse
+        print("Grundwörter:", grundwörter)
+        print("Schwierige Wörter:", schwierige_wörter)
+    else:
+        print(ergebnisse)  # Fehlernachricht ausgeben
