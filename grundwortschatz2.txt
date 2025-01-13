@@ -722,6 +722,7 @@ darf
 das
 davor
 dein
+den
 denke
 denken
 denkend
@@ -729,6 +730,7 @@ denkst
 denkt
 denkte
 denn
+dem
 der
 dich
 die
@@ -746,6 +748,7 @@ draußst
 draußt
 draußte
 drei
+du
 dumm
 durch
 dürfe
@@ -915,6 +918,7 @@ gießend
 gießst
 gießt
 gießte
+ging
 groß
 grüße
 grüßen
@@ -931,6 +935,7 @@ guckend
 guckst
 guckt
 guckte
+hab
 habe
 haben
 habend
@@ -1138,6 +1143,8 @@ malte
 man
 mehr
 mein
+meinen
+meinem
 meistens
 mich
 mir
@@ -1349,6 +1356,7 @@ sitzend
 sitzst
 sitzt
 sitzte
+so
 solle
 sollen
 sollend
