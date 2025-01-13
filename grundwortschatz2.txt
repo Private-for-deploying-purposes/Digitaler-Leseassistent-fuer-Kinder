@@ -919,6 +919,7 @@ gießst
 gießt
 gießte
 ging
+gingen
 groß
 grüße
 grüßen
@@ -1357,6 +1358,7 @@ sitzst
 sitzt
 sitzte
 so
+soll
 solle
 sollen
 sollend
