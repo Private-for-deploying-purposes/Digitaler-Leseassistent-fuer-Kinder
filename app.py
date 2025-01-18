@@ -106,12 +106,35 @@ st.markdown(
 # -----------------------------------------------------------------------------
 # 4. A dictionary for "difficult" words
 # -----------------------------------------------------------------------------
-wort_definitionen = {
+
+def load_grundwortschatz(file_path):
+    try:
+        with open(file_path, "r", encoding="utf-8") as f:
+            words = [line.strip().lower() for line in f if line.strip()]
+        return words
+    except Exception as e:
+        print(f"Fehler beim Laden der Grundwortschatz-Datei: {e}")
+        return []
+
+wort_definitionen = load_grundwortschatz("grundwortschatz2.txt")
+
+"""
+for i in range(5):
+    try:
+        if "Abend" in wort_definitionen:
+            print("hello world")
+        else:
+            print("No world")
+    except:
+        print("mission failed")
+"""
+
+"""{
     "kompliziert": "Etwas, das schwer zu verstehen oder zu machen ist.",
     "technologie": "Dinge, die mit Maschinen oder Computern gemacht werden.",
     "phänomen": "Etwas Besonderes, das man sehen oder beobachten kann.",
     "wissenschaft": "Das Lernen über die Natur und die Welt durch Experimente."
-}
+}"""
 
 # -----------------------------------------------------------------------------
 # 5. Helper function: Text analysis + highlight difficult words
@@ -120,7 +143,7 @@ def analyse_text(text: str):
     """Highlights words found in wort_definitionen and shows definitions below."""
     schwierige_worte = [
         wort for wort in text.split() 
-        if wort.lower().strip(".,!?;:") in wort_definitionen
+        if wort.lower().strip(".,!?;:") not in wort_definitionen
     ]
 
     if schwierige_worte:
@@ -138,7 +161,8 @@ def analyse_text(text: str):
         st.markdown("<h4>Erkannte schwierige Wörter:</h4>", unsafe_allow_html=True)
         for wort in schwierige_worte:
             lower_wort = wort.lower().strip(".,!?;:")
-            st.markdown(f"- **{wort.capitalize()}**: {wort_definitionen[lower_wort]}")
+            st.markdown(f"- **{wort.capitalize()}**: ")
+            #st.markdown(f"- **{wort.capitalize()}**: {wort_definitionen[lower_wort]}")
     else:
         st.success("Keine schwierigen Wörter gefunden!")
 
