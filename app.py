@@ -334,11 +334,13 @@ def woerter_entdecker_page():
     if "text_input" not in st.session_state:
         st.session_state.text_input = ""  # Initialize text_input in session state
 
-    # Text input for manual analysis
+    # Text input area
     st.markdown("### 📝 Gib hier deinen Text ein:")
-    text_input = st.text_area("Deinen Text hier eingeben...", height=100, value=st.session_state.text_input, key="text_input_area")
-
-
+    st.session_state.text_input = st.text_area(
+        "Deinen Text hier eingeben...", 
+        value=st.session_state.text_input, 
+        height=100
+    )
 
     # Button 1: Start speech recognition
     if st.button("🎤 Spracheingabe starten"):
@@ -351,8 +353,11 @@ def woerter_entdecker_page():
                 recognized_text = recognizer.recognize_google(audio, language="de-DE")
                 st.success(f"Erkannter Text: {recognized_text}")
                 
-                # Update the text input area with the recognized text
-                st.session_state.text_input = recognized_text  # Storing the recognized text in session state
+                # Append the recognized text to the session state
+                if st.session_state.text_input:
+                    st.session_state.text_input += " " + recognized_text
+                else:
+                    st.session_state.text_input = recognized_text
 
         except sr.UnknownValueError:
             st.error("Entschuldigung, ich konnte nichts verstehen. Bitte versuche es erneut.")
@@ -362,6 +367,7 @@ def woerter_entdecker_page():
             st.error("Timeout-Fehler: Keine Sprache erkannt. Bitte sprich innerhalb der erlaubten Zeit.")
 
 
+
     # Get text_input from session_state if it exists, to keep recognized text
     if "text_input" in st.session_state:
         text_input= st.session_state.text_input
@@ -369,19 +375,18 @@ def woerter_entdecker_page():
     st.markdown("<hr>", unsafe_allow_html=True)
 
     # Button 2: Manually analyze text input
-    st.markdown("### ❓ Manually analyze text input")
+    st.markdown("### ❓ Texteingaben analysieren")
     if st.button("🔍 Los!"):
-        if text_input.strip():
-            analyse_text(text_input)
+        if st.session_state.text_input.strip():
+            analyse_text(st.session_state.text_input)
         else:
             st.error("Bitte gib einen Text ein!")
-
-    st.markdown("<hr>", unsafe_allow_html=True)
+        st.markdown("<hr>", unsafe_allow_html=True)
 
     # Questions section
     st.markdown("### ❓ Fragen beantworten")
     question_input = st.text_input("Gib hier deine Frage ein:")
-    context_input = text_input
+    context_input = st.session_state.text_input
 
     if st.button("🧠 Frage beantworten"):
         if not question_input.strip():
@@ -390,14 +395,14 @@ def woerter_entdecker_page():
             st.error("Bitte gib einen Kontext ein!")
         else:
             # Translate input (question and context) from German to English
-            translated_question = translate_text(question_input, target_language='en')
-            translated_context = translate_text(context_input, target_language='en')
+            translated_question = translate_text(question_input, target_language="en")
+            translated_context = translate_text(context_input, target_language="en")
 
             # Get the answer using the model (on translated inputs)
             answer_in_english = answer_question_with_model(translated_question, translated_context)
 
             # Translate the answer back from English to German
-            answer_in_german = translate_text(answer_in_english, target_language='de')
+            answer_in_german = translate_text(answer_in_english, target_language="de")
 
             # Display the final answer in German
             st.markdown(f"### 🧠 Antwort:\n\n**{answer_in_german}**")
