@@ -1,76 +1,79 @@
-import spacy
-import pandas as pd
+from transformers import pipeline
+import requests
+from bs4 import BeautifulSoup
+import streamlit as st
 
-# Lade das deutsche NER-Modell
-nlp = spacy.load("de_core_news_sm")
+# NER-Pipeline mit deutschem Modell
+ner_pipeline = pipeline("ner", model="dbmdz/bert-base-german-cased", aggregation_strategy="simple")
 
-# Funktion zum Laden des Grundwortschatzes
-def load_grundwortschatz(file_path):
+def get_duden_definition(word):
+    """
+    Holt die Definition eines Wortes aus dem Duden.
+    """
+    word = word.lower().strip(",.?!")  # Normalisiere das Wort
     try:
-        with open(file_path, "r", encoding="utf-8") as f:
-            words = [line.strip().lower() for line in f if line.strip()]
-        return set(words)  # Set für schnelleren Vergleich
-    except Exception as e:
-        print(f"Fehler beim Laden der Grundwortschatz-Datei: {e}")
-        return set()
+        url = f"https://www.duden.de/rechtschreibung/{word}"
+        response = requests.get(url, timeout=10)
 
-# Funktion zur Erkennung schwieriger Wörter
-def erkenne_schwere_wörter(text, grundwortschatz):
-    # Text mit SpaCy verarbeiten
-    doc = nlp(text)
+        if response.status_code == 200:
+            soup = BeautifulSoup(response.text, 'html.parser')
 
-    # Listen für Ergebnisse
-    grundwörter = []
-    schwierige_wörter = []
+            # Suche nach der Hauptdefinition
+            definition_element = soup.find("div", class_="lemma__determination")
+            if definition_element:
+                return definition_element.get_text(strip=True)
 
-    # Wörter prüfen
-    for token in doc:
-        if token.is_alpha:  # Nur Wörter, keine Satzzeichen
-            wort = token.text.lower()
-            if wort in grundwortschatz:
-                grundwörter.append(wort)
-            else:
-                schwierige_wörter.append(wort)
+            # Alternative Definition (z. B. bei Synonymen)
+            additional_definition = soup.find("div", class_="tuple__definition")
+            if additional_definition:
+                return additional_definition.get_text(strip=True)
 
-    return grundwörter, schwierige_wörter
-
-# Funktion zur Verarbeitung des hochgeladenen Datasets
-def verarbeite_dataset(file_path, grundwortschatz_path):
-    # Lade den Grundwortschatz
-    grundwortschatz = load_grundwortschatz(grundwortschatz_path)
-
-    # Lade die hochgeladenen Texte
-    try:
-        if file_path.endswith(".txt"):
-            with open(file_path, "r", encoding="utf-8") as f:
-                text = f.read()
-        elif file_path.endswith(".csv"):
-            df = pd.read_csv(file_path)
-            text = " ".join(df.iloc[:, 0].astype(str))  # Annahme: Text ist in der ersten Spalte
-        elif file_path.endswith(".json"):
-            df = pd.read_json(file_path)
-            text = " ".join(df.iloc[:, 0].astype(str))
+            # Kein Treffer gefunden
+            return f"Keine Definition für '{word}' im Duden gefunden."
         else:
-            raise ValueError("Nur .txt, .csv oder .json Dateien werden unterstützt.")
+            return f"Duden-Seite nicht gefunden für '{word}'."
     except Exception as e:
-        return f"Fehler beim Laden der Datei: {e}"
+        return f"Fehler bei der Definitionsermittlung: {str(e)}"
 
-    # Schwierige Wörter erkennen
-    grundwörter, schwierige_wörter = erkenne_schwere_wörter(text, grundwortschatz)
-    return grundwörter, schwierige_wörter
+def find_and_define_difficult_words(text):
+    """
+    Erkennt schwierige Wörter im Text und holt Definitionen.
+    """
+    detected_words = set()
+    results = ner_pipeline(text)
 
-# Hauptprogramm
+    for entity in results:
+        word = entity['word']
+        if not word.startswith("##") and len(word) > 2 and word.isalpha():
+            detected_words.add(word)
+
+    definitions = {}
+    for word in detected_words:
+        definitions[word] = get_duden_definition(word)
+
+    return definitions
+
+def main():
+    """
+    Streamlit-App für die Verarbeitung von Text und Darstellung der Ergebnisse.
+    """
+    st.title("📖 Digitaler Leseassistent - Wörter Erkennen und Erklären")
+
+    text = st.text_area("Gib hier deinen Text ein, um schwierige Wörter zu erkennen:", height=200)
+
+    if st.button("🔍 Wörter analysieren"):
+        if text.strip():
+            with st.spinner("Analysiere den Text und hole Definitionen..."):
+                definitions = find_and_define_difficult_words(text)
+
+            if definitions:
+                st.markdown("### 🧠 Gefundene schwierige Wörter und ihre Definitionen:")
+                for word, definition in definitions.items():
+                    st.markdown(f"- **{word}**: {definition}")
+            else:
+                st.success("Keine schwierigen Wörter erkannt!")
+        else:
+            st.error("Bitte gib einen gültigen Text ein!")
+
 if __name__ == "__main__":
-    # Beispielpfade
-    dataset_path = "kindertexte.txt"  # Muss ich noch durch tatsächlichen Pfad erstezten
-    grundwortschatz_path = "grundwortschatz.txt"
-
-    # Verarbeite das Dataset
-    ergebnisse = verarbeite_dataset(dataset_path, grundwortschatz_path)
-
-    if isinstance(ergebnisse, tuple):  # Wenn keine Fehler auftraten
-        grundwörter, schwierige_wörter = ergebnisse
-        print("Grundwörter:", grundwörter)
-        print("Schwierige Wörter:", schwierige_wörter)
-    else:
-        print(ergebnisse)  # Fehlernachricht ausgeben
+    main()
