@@ -3,6 +3,7 @@ from streamlit_lottie import st_lottie
 import speech_recognition as sr
 import requests
 import json
+import re
 
 # -----------------------------------------------------------------------------
 # 1. Set up page config (Optional: affects favicon, layout, etc.)
@@ -118,36 +119,81 @@ def load_grundwortschatz(file_path):
 
 wort_definitionen = load_grundwortschatz("grundwortschatz2.txt")
 
-"""
-for i in range(5):
-    try:
-        if "Abend" in wort_definitionen:
-            print("hello world")
-        else:
-            print("No world")
-    except:
-        print("mission failed")
-"""
 
-"""{
-    "kompliziert": "Etwas, das schwer zu verstehen oder zu machen ist.",
-    "technologie": "Dinge, die mit Maschinen oder Computern gemacht werden.",
-    "phänomen": "Etwas Besonderes, das man sehen oder beobachten kann.",
-    "wissenschaft": "Das Lernen über die Natur und die Welt durch Experimente."
-}"""
+def extract_meanings_only(text):
+    # Extrahiere nur den Bedeutungen-Abschnitt
+    match = re.search(r"Bedeutungen:\n(.*?)\n(?:Synonyme:|Beispiele:|Wortbildungen:|\Z)", text, re.DOTALL)
+    if match:
+        return match.group(1).strip()
+    
+    match2 = re.search(r"Grammatische Merkmale:\n(.*?)(\n\n|\Z)", text, re.DOTALL)
+    if match2:
+        return match2.group(1).strip()
+
+    #"""
+    #if ord(text[0]) > 96:
+    #    textE = text.capitalize()
+    #    match = re.search(r"Bedeutungen:\n(.*?)\n(?:Synonyme:|Beispiele:|Wortbildungen:|\Z)", textE, re.DOTALL)
+    #else:
+    #    textE = text.lower()
+    #    match = re.search(r"Bedeutungen:\n(.*?)\n(?:Synonyme:|Beispiele:|Wortbildungen:|\Z)", textE, re.DOTALL)
+    #    SC = f"Sicherheitsckeck von {text[1:]}"
+    #"""
+    
+    #SC = f"Sicherheitsckeck von {text[1:]}"
+    return f"Keine Bedeutungen gefunden1.{text}"
+
+
+def erklaeren(word):
+    api_url = "https://de.wiktionary.org/w/api.php"
+    params = {
+        "action": "query",
+        "format": "json",
+        "prop": "extracts",
+        "titles": word,
+        "explaintext": True  # Nur reiner Text (ohne HTML)
+
+    }
+
+    # API-Request
+    response = requests.get(api_url, params=params)
+    response.raise_for_status()
+    data = response.json()
+
+    pages = data.get("query", {}).get("pages", {})
+    for page_id, page_data in pages.items():
+        extract = page_data.get("extract", "")
+        if extract:
+            return extract_meanings_only(extract)
+        
+    return "Keine Bedeutungen gefunden2."
+
+    #return f"Keine Erklärung für das Wort '{word}' gefunden."
+
 
 # -----------------------------------------------------------------------------
 # 5. Helper function: Text analysis + highlight difficult words
 # -----------------------------------------------------------------------------
 def analyse_text(text: str):
     """Highlights words found in wort_definitionen and shows definitions below."""
+    
+    text2 = text
+    
+    for i in text:
+        if (65 <= ord(i) <= 90) or (97 <= ord(i) <= 122) or i in "äöüß ÄÖÜ":
+            pass
+        else:
+            text = text.replace(i, "")
+
     schwierige_worte = [
         wort for wort in text.split() 
         if wort.lower().strip(".,!?;:") not in wort_definitionen
     ]
 
+    schwierige_worte = set(schwierige_worte)
+
     if schwierige_worte:
-        highlighted_text = text
+        highlighted_text = text2
         for wort in schwierige_worte:
             lower_wort = wort.lower().strip(".,!?;:")
             highlighted_text = highlighted_text.replace(
@@ -160,8 +206,16 @@ def analyse_text(text: str):
 
         st.markdown("<h4>Erkannte schwierige Wörter:</h4>", unsafe_allow_html=True)
         for wort in schwierige_worte:
-            lower_wort = wort.lower().strip(".,!?;:")
-            st.markdown(f"- **{wort.capitalize()}**: ")
+            #lower_wort = wort.lower().strip(".,!?;:")
+            bedut = erklaeren(wort)
+            if bedut == "Keine Bedeutungen gefunden.":
+                bedut = erklaeren(wort.lower())
+                if bedut == "Keine Bedeutungen gefunden.":
+                    bedut = erklaeren(wort.capitalize())
+                else:
+                    bedut= "Als ob es das Wort nicht gibt"
+
+            st.markdown(f"- **{wort.capitalize()}**: {bedut}")
             #st.markdown(f"- **{wort.capitalize()}**: {wort_definitionen[lower_wort]}")
     else:
         st.success("Keine schwierigen Wörter gefunden!")
