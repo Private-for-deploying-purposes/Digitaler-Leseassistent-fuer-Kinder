@@ -4,6 +4,12 @@ import speech_recognition as sr
 import requests
 import json
 import re
+from transformers import DistilBertTokenizerFast, DistilBertForQuestionAnswering
+import torch
+import streamlit as st
+import re
+from googletrans import Translator  # Import the Translator
+
 
 # -----------------------------------------------------------------------------
 # 1. Set up page config (Optional: affects favicon, layout, etc.)
@@ -14,6 +20,21 @@ st.set_page_config(
     layout="centered"
 )
 
+# ---------------------------------------------------------------------------
+# 1.1.Load Fine-Tuned Model and Tokenizer
+# ---------------------------------------------------------------------------
+@st.cache_resource
+def load_qa_model():
+    """
+    Load the fine-tuned DistilBERT model and tokenizer for QA.
+    """
+    model_path = "./distilbert-qa"  # Path to your saved model
+    tokenizer = DistilBertTokenizerFast.from_pretrained(model_path)
+    model = DistilBertForQuestionAnswering.from_pretrained(model_path)
+    return model, tokenizer
+# Initialize the Google Translator
+translator = Translator()
+qa_model, qa_tokenizer = load_qa_model()
 # -----------------------------------------------------------------------------
 # 2. Function to load Lottie animations (with caching)
 # -----------------------------------------------------------------------------
@@ -218,7 +239,45 @@ def analyse_text(text: str):
             #st.markdown(f"- **{wort.capitalize()}**: {wort_definitionen[lower_wort]}")
     else:
         st.success("Keine schwierigen Wörter gefunden!")
+# ---------------------------------------------------------------------------
+# 5.1 Question Answering Function
+# ---------------------------------------------------------------------------
+def translate_text(text, target_language='en'):
+    """
+    Translate the input text to the target language (default is English).
+    """
+    translation = translator.translate(text, dest=target_language)
+    return translation.text
+def answer_question_with_model(question, context): 
+    """ 
+    Use the fine-tuned DistilBERT model to answer a question based on context. 
+    """ 
+    device = torch.device("cuda" if torch.cuda.is_available() else "cpu") 
+    qa_model.to(device)
 
+    # Tokenize inputs
+    inputs = qa_tokenizer(
+        question,
+        context,
+        return_tensors="pt",
+        truncation=True,
+        padding="max_length",
+        max_length=384
+    ).to(device)
+
+    # Run the model and get logits
+    with torch.no_grad():
+        outputs = qa_model(**inputs)
+        start_logits = outputs.start_logits
+        end_logits = outputs.end_logits
+
+    # Get the start and end indices
+    start_idx = torch.argmax(start_logits)
+    end_idx = torch.argmax(end_logits)
+
+    # Decode the answer
+    answer = qa_tokenizer.decode(inputs["input_ids"][0][start_idx:end_idx + 1])
+    return answer
 # -----------------------------------------------------------------------------
 # 6. Define our two pages as functions
 # -----------------------------------------------------------------------------
@@ -250,7 +309,7 @@ def start_page():
 def woerter_entdecker_page():
     """
     This page is the 'Wörter-Entdecker', allowing users to input text,
-    highlight difficult words, and also handle speech recognition.
+    highlight difficult words, and also handle QA logic.
     """
     st.markdown("<h1 class='title'>🔍 Wörter-Entdecker</h1>", unsafe_allow_html=True)
     st.markdown("<p class='subtitle'>Entdecke neue Wörter und finde Antworten auf spannende Fragen!</p>", unsafe_allow_html=True)
@@ -267,51 +326,79 @@ def woerter_entdecker_page():
             loop=True
         )
     else:
-        st.error("Animation konnte nicht geladen werden.")
+        st.error("Animation konnte nicht geladen.")
+
+    # Initialize session state for text input if not already initialized
+    if "text_input" not in st.session_state:
+        st.session_state.text_input = ""  # Initialize text_input in session state
 
     # Text input for manual analysis
     st.markdown("### 📝 Gib hier deinen Text ein:")
-    text_input = st.text_area("Deinen Text hier eingeben...", height=100)
+    text_input = st.text_area("Deinen Text hier eingeben...", height=100, value=st.session_state.text_input, key="text_input_area")
 
-    col1, col2 = st.columns(2)
+
 
     # Button 1: Start speech recognition
-    with col1:
-        if st.button("🎤 Spracheingabe starten"):
-            recognizer = sr.Recognizer()
-            try:
-                with sr.Microphone() as source:
-                    st.info("🎤 Spracheingabe läuft... Bitte sprechen Sie.")
-                    recognizer.adjust_for_ambient_noise(source, duration=1)
-                    audio = recognizer.listen(source, timeout=10)
-                    recognized_text = recognizer.recognize_google(audio, language="de-DE")
-                    st.success(f"Erkannter Text: {recognized_text}")
-                    analyse_text(recognized_text)
+    if st.button("🎤 Spracheingabe starten"):
+        recognizer = sr.Recognizer()
+        try:
+            with sr.Microphone() as source:
+                st.info("🎤 Spracheingabe läuft... Bitte sprechen Sie.")
+                recognizer.adjust_for_ambient_noise(source, duration=1)
+                audio = recognizer.listen(source, timeout=10)
+                recognized_text = recognizer.recognize_google(audio, language="de-DE")
+                st.success(f"Erkannter Text: {recognized_text}")
+                
+                # Update the text input area with the recognized text
+                st.session_state.text_input = recognized_text  # Storing the recognized text in session state
 
-            except sr.UnknownValueError:
-                st.error("Entschuldigung, ich konnte nichts verstehen. Bitte versuche es erneut.")
-            except sr.RequestError as e:
-                st.error(f"Fehler bei der Verbindung: {e}")
-            except sr.WaitTimeoutError:
-                st.error("Timeout-Fehler: Keine Sprache erkannt. Bitte sprich innerhalb der erlaubten Zeit.")
+        except sr.UnknownValueError:
+            st.error("Entschuldigung, ich konnte nichts verstehen. Bitte versuche es erneut.")
+        except sr.RequestError as e:
+            st.error(f"Fehler bei der Verbindung: {e}")
+        except sr.WaitTimeoutError:
+            st.error("Timeout-Fehler: Keine Sprache erkannt. Bitte sprich innerhalb der erlaubten Zeit.")
+
+
+    # Get text_input from session_state if it exists, to keep recognized text
+    if "text_input" in st.session_state:
+        text_input= st.session_state.text_input
+
+    st.markdown("<hr>", unsafe_allow_html=True)
 
     # Button 2: Manually analyze text input
-    with col2:
-        if st.button("🔍 Los!"):
-            if text_input.strip():
-                analyse_text(text_input)
-            else:
-                st.error("Bitte gib einen Text ein!")
+    st.markdown("### ❓ Manually analyze text input")
+    if st.button("🔍 Los!"):
+        if text_input.strip():
+            analyse_text(text_input)
+        else:
+            st.error("Bitte gib einen Text ein!")
 
     st.markdown("<hr>", unsafe_allow_html=True)
 
     # Questions section
     st.markdown("### ❓ Fragen beantworten")
     question_input = st.text_input("Gib hier deine Frage ein:")
-    if st.button("🧠 Frage beantworten"):
-        # Placeholder: Here you could integrate an actual Q&A logic
-        st.success("Frage beantwortet!")
+    context_input = text_input
 
+    if st.button("🧠 Frage beantworten"):
+        if not question_input.strip():
+            st.error("Bitte gib eine Frage ein!")
+        elif not context_input.strip():
+            st.error("Bitte gib einen Kontext ein!")
+        else:
+            # Translate input (question and context) from German to English
+            translated_question = translate_text(question_input, target_language='en')
+            translated_context = translate_text(context_input, target_language='en')
+
+            # Get the answer using the model (on translated inputs)
+            answer_in_english = answer_question_with_model(translated_question, translated_context)
+
+            # Translate the answer back from English to German
+            answer_in_german = translate_text(answer_in_english, target_language='de')
+
+            # Display the final answer in German
+            st.markdown(f"### 🧠 Antwort:\n\n**{answer_in_german}**")
 # -----------------------------------------------------------------------------
 # 7. Wrap each function in an `st.Page` object, then pass them to `st.navigation`
 # -----------------------------------------------------------------------------
@@ -325,3 +412,4 @@ woerter_entdecker = st.Page(
 # Create the navigation, pass the list of pages. We call .run() to execute
 nav = st.navigation([startseite, woerter_entdecker])
 nav.run()
+
