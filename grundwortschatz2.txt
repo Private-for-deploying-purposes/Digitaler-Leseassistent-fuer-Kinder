@@ -1518,6 +1518,7 @@ wachte
 wahr
 wann
 warum
+war
 was
 we
 weg

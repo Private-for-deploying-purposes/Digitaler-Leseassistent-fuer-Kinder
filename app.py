@@ -120,7 +120,7 @@ def load_grundwortschatz(file_path):
 wort_definitionen = load_grundwortschatz("grundwortschatz2.txt")
 
 
-def extract_meanings_only(text):
+def extract_wik(text):
     # Extrahiere nur den Bedeutungen-Abschnitt
     match = re.search(r"Bedeutungen:\n(.*?)\n(?:Synonyme:|Beispiele:|Wortbildungen:|\Z)", text, re.DOTALL)
     if match:
@@ -151,8 +151,7 @@ def erklaeren(word):
         "format": "json",
         "prop": "extracts",
         "titles": word,
-        "explaintext": True  # Nur reiner Text (ohne HTML)
-
+        "explaintext": True 
     }
 
     # API-Request
@@ -164,7 +163,7 @@ def erklaeren(word):
     for page_id, page_data in pages.items():
         extract = page_data.get("extract", "")
         if extract:
-            return extract_meanings_only(extract)
+            return extract_wik(extract)
         
     return "Keine Bedeutungen gefunden2."
 
@@ -186,7 +185,7 @@ def analyse_text(text: str):
             text = text.replace(i, "")
 
     schwierige_worte = [
-        wort for wort in text.split() 
+        wort for wort in text.split(" ") 
         if wort.lower().strip(".,!?;:") not in wort_definitionen
     ]
 
@@ -195,7 +194,7 @@ def analyse_text(text: str):
     if schwierige_worte:
         highlighted_text = text2
         for wort in schwierige_worte:
-            lower_wort = wort.lower().strip(".,!?;:")
+            #lower_wort = wort.lower().strip(".,!?;:")
             highlighted_text = highlighted_text.replace(
                 wort,
                 f"<span style='color: red; font-weight: bold;'>{wort}</span>"
