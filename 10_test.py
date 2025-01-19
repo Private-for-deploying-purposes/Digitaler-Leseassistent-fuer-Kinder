@@ -40,7 +40,7 @@ def answer_question(question, context, model, tokenizer):
     return answer
 
 # Define paths
-model_path = "./distilbert-qa"  # Path where the model is saved
+model_path = "distilbert-qa"  # Path where the model is saved
 
 # Load model and tokenizer
 tokenizer = DistilBertTokenizerFast.from_pretrained(model_path)
