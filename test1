@@ -17,7 +17,6 @@ ner_pipeline = pipeline("ner", model="dbmdz/bert-base-german-cased", aggregation
 german_stopwords = set(stopwords.words("german"))
 
 # Zusätzliche häufige Wörter, die ignoriert werden sollen
-#frequent_words = {"hatte", "hast", "hat", "ist", "und", "oder", "nicht", "das", "war", "ein", "eine", "der", "die", "mit"}
 def load_grundwortschatz(file_path):
     try:
         with open(file_path, "r", encoding="utf-8") as f:
@@ -27,6 +26,7 @@ def load_grundwortschatz(file_path):
         print(f"Fehler beim Laden der Grundwortschatz-Datei: {e}")
         return []
 frequent_words = load_grundwortschatz("grundwortschatz2.txt")
+print(frequent_words)
 
 # Funktion: Häufige Wörter filtern
 def is_common_word(word):
@@ -84,6 +84,23 @@ def find_difficult_words(text):
 
     return definitions
 
+def textcheck(text):
+    for i in text:
+        if (65 <= ord(i) <= 90) or (97 <= ord(i) <= 122) or i in "äöüß ÄÖÜ":
+            pass
+        else:
+            text = text.replace(i, "")
+
+    schwierige_worte = [
+        wort for wort in text.split(" ") 
+        if wort.lower().strip(".,!?;:") not in frequent_words
+    ]
+
+    schwierige_worte = set(schwierige_worte)
+    text = ' '.join(schwierige_worte)
+    return text
+
+
 # Hauptfunktion für Streamlit
 def main():
     st.title("📖 Digitaler Leseassistent - Wörter Erkennen und Erklären")
@@ -93,12 +110,15 @@ def main():
     if st.button("🔍 Wörter analysieren"):
         if text.strip():
             with st.spinner("Analysiere den Text..."):
+                text2 = text
+                text3 = textcheck(text2)
                 definitions = find_difficult_words(text)
 
             if definitions:
                 st.markdown("### 🧠 Gefundene schwierige Wörter:")
                 for word, definition in definitions.items():
-                    st.markdown(f"- **{word}**: {definition}")
+                    if word in text3:
+                        st.markdown(f"- **{word}**: {definition}")
             else:
                 st.success("Keine schwierigen Wörter erkannt!")
         else:
