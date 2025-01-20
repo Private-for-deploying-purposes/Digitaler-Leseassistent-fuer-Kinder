@@ -43,7 +43,7 @@ Um das Modell auf unsere Anforderungen anzupassen, haben wir eine Filterlogik en
 Leider hat dieser Ansatz aufgrund mehrerer Probleme nicht wie erhofft funktioniert. Zum einen ist das NER-Modell nicht speziell darauf trainiert, schwierige Wörter zu erkennen. Es liefert stattdessen oft Entitäten, die für unsere Aufgabe irrelevant sind, wie Eigennamen oder häufig vorkommende Begriffe, die keine besondere Schwierigkeit darstellen. Zum anderen produziert das Modell manchmal unvollständige Tokens, beispielsweise durch die Zerstückelung von Wörtern, was die weitere Verarbeitung erschwert.
 Ein Problem war die Abhängigkeit von der Filterlogik. Obwohl der Grundwortschatz dazu beiträgt, einfache Wörter auszuschließen, fehlen klare Kriterien dafür, was ein schwieriges Wort ausmacht. Schwierigkeit ist subjektiv und hängt von der Zielgruppe ab. Wörter, die für Kinder unbekannt sind, könnten in einem anderen Kontext als einfach gelten.
 
-Entwicklung der Benutzeroberfläche (UI)
+Abschnitt Entwicklung der Benutzeroberfläche (UI)
 
 Im Rahmen unseres Projekts wurde eine benutzerfreundliche und interaktive Oberfläche entworfen, die speziell auf die Bedürfnisse junger Leserinnen und Leser zugeschnitten ist. Dabei stand im Vordergrund, eine intuitive Navigation und ein ansprechendes Design zu schaffen, das alle Funktionalitäten des Tools wirkungsvoll unterstützt.
 
