@@ -17,7 +17,16 @@ ner_pipeline = pipeline("ner", model="dbmdz/bert-base-german-cased", aggregation
 german_stopwords = set(stopwords.words("german"))
 
 # Zusätzliche häufige Wörter, die ignoriert werden sollen
-frequent_words = {"hatte", "hast", "hat", "ist", "und", "oder", "nicht", "das", "war", "ein", "eine", "der", "die", "mit"}
+#frequent_words = {"hatte", "hast", "hat", "ist", "und", "oder", "nicht", "das", "war", "ein", "eine", "der", "die", "mit"}
+def load_grundwortschatz(file_path):
+    try:
+        with open(file_path, "r", encoding="utf-8") as f:
+            words = [line.strip().lower() for line in f if line.strip()]
+        return set(words)
+    except Exception as e:
+        print(f"Fehler beim Laden der Grundwortschatz-Datei: {e}")
+        return []
+frequent_words = load_grundwortschatz("grundwortschatz2.txt")
 
 # Funktion: Häufige Wörter filtern
 def is_common_word(word):
