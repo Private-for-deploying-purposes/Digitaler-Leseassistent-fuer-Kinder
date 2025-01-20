@@ -28,8 +28,8 @@ def load_qa_model():
     """
     Load the fine-tuned DistilBERT model and tokenizer for QA.
     """
-    model_path = "./distilbert-qa"  # Path to your saved model
-    #model_path = "mxhmxt/distilbert-qa-digital-reading-assistant-for-children"  # Path to your saved model
+    #model_path = "./distilbert-qa"  # Path to your saved model
+    model_path = "mxhmxt/distilbert-qa-digital-reading-assistant-for-children"  # Path to your saved model
     #https://huggingface.co/mxhmxt/distilbert-qa-digital-reading-assistant-for-children/tree/main
     tokenizer = DistilBertTokenizerFast.from_pretrained(model_path)
     model = DistilBertForQuestionAnswering.from_pretrained(model_path)
