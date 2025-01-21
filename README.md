@@ -22,8 +22,8 @@ Gruppenmitglieder:
 
 Alexander Rohr
 Tim Stelzner
-Mehmet Marijanovic
-Rouah Abdul Jawad
+Mehmet Marijanovic: 3544801      
+Rouah Abdul Jawad: 5382671 
 
 
 
