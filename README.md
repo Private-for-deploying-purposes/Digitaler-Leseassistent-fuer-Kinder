@@ -84,6 +84,7 @@ python -m streamlit run app.py
 
 > Hinweis: `python -m` ist optional, falls Streamlit nicht als globale Variable definiert ist.
 
+
 ## Ausführung der `model fine tuning.py` im "training model"-Ordner
 
 ### Anforderungen:
@@ -96,5 +97,35 @@ python -m streamlit run app.py
 
 ```bash
 python "training model/model fine tuning.py"
+```
+> Hinweis: Stelle sicher, dass du die richtigen Python-Pakete installiert hast, du im richtigen directory bist und der SQuAD-Datensatz korrekt verfügbar ist.
+
+
+## Ausführung der `evaluation.py` im "training model"-Ordner
+
+### Anforderungen:
+- Python
+- **Scikit-learn**: `pip install scikit-learn`
+- **Transformers**: `pip install transformers`
+- **Datasets**: `pip install datasets`
+- **Torch**: `pip install torch`
+
+### Um das Modell zu evaluieren, gebe folgendes im Terminal ein:
+```bash
+python "training model/evaluation.py"
+```
+> Hinweis: Stelle sicher, dass du die richtigen Python-Pakete installiert hast, du im richtigen directory bist und der SQuAD-Datensatz korrekt verfügbar ist.
+
+
+## Ausführung der `testing fine tuned model.py` im "training model"-Ordner
+
+### Anforderungen:
+- Python
+- **Transformers**: `pip install transformers`
+- **Torch**: `pip install torch`
+
+### Um das Modell zu evaluieren, gebe folgendes im Terminal ein:
+```bash
+python "training model/testing fine tuned model.py"
 ```
 > Hinweis: Stelle sicher, dass du die richtigen Python-Pakete installiert hast, du im richtigen directory bist und der SQuAD-Datensatz korrekt verfügbar ist.
