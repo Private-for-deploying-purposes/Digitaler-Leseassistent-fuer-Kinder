@@ -130,3 +130,17 @@ python "training model/evaluation.py"
 python "training model/testing fine tuned model.py"
 ```
 > Hinweis: Stelle sicher, dass du die richtigen Python-Pakete installiert hast, du im richtigen directory bist und der SQuAD-Datensatz korrekt verfügbar ist.
+
+
+## Ausführung der `Worteinteilung.py` im "history"-Ordner
+
+### Anforderungen:
+- Python
+- **Requests**: `pip install requests`
+- **re**: `pip install re`
+
+### Um das Modell zu evaluieren, gebe folgendes im Terminal ein:
+```bash
+python "history/Worteinteilung.py"
+```
+> Hinweis: Stelle sicher, dass du die richtigen Python-Pakete installiert hast, du im richtigen directory bist und die Grundwortschatz im richtigen Ordner ist.
