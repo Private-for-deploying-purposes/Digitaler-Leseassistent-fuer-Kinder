@@ -146,14 +146,14 @@ python "training model/testing fine tuned model.py"
 - **Requests**: `pip install requests`
 - **re**: `pip install re`
 
-### Um das Modell zu evaluieren, gebe folgendes im Terminal ein:
+### Um den Code Worteinteilung auszuführen, gebe folgendes im Terminal ein:
 ```bash
 python "history/Worteinteilung.py"
 ```
 > Hinweis: Stelle sicher, dass du die richtigen Python-Pakete installiert hast, du im richtigen directory bist und die Grundwortschatz im richtigen Ordner ist.
->
 
-## Ausführung ´schwierigeWörter_mit_NER_Code_Beispiel` im "history"-Ordner"
+
+## Ausführung ´schwierigeWörter_mit_NER_Code_Beispiel.py` im "history"-Ordner"
 ### Anforderungen:
 
 - Python 3.8 oder höher
@@ -162,3 +162,11 @@ python "history/Worteinteilung.py"
 - Transformers: `pip install transformers`
 - NLTK: `pip install nltk`
 - Requests: `pip install requests`
+
+### Um den Code schwierigeWörter_mit_NER_Code_Beispiel auszuführen, gebe folgendes im Terminal ein:
+```bash
+python "history/schwierigeWörter_mit_NER_Code_Beispiel.py"
+```
+> Hinweis: Stelle sicher, dass du die richtigen Python-Pakete installiert hast, du im richtigen directory bist und die Grundwortschatz im richtigen Ordner ist.
+
+  
