@@ -1,6 +1,7 @@
 # Digitaler-Leseassistent-fuer-Kinder-
 WWI22DSA/B Natural Language Processing (Aktuelle Data Science-Entwicklungen I)
-Model also found on hugging face:
+
+Model can also be found on hugging face:
 https://huggingface.co/mxhmxt/distilbert-qa-digital-reading-assistant-for-children/tree/main
 
 Digitaler Leseassistent für Kinder: 
