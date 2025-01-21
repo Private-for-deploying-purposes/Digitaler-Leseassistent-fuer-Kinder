@@ -33,7 +33,6 @@ Rouah Abdul Jawad
 
   - **distilbert-qa**: Enthält das trainierte Modell. Um das Modell zu trainieren, muss die Datei im Ordner **"training model" > "model fine tuning"** ausgeführt werden. Dabei wird das **`distilbert-base-uncased`**-Modell mit dem **SQuAD-Datensatz** trainiert. Das Modell ist auch auf [Hugging Face verfügbar](https://huggingface.co/mxhmxt/distilbert-qa-digital-reading-assistant-for-children/tree/main).
   
-  - **gifs**: Enthält GIFs für die Website.
 
   - **history**: Dieser Ordner enthält vier Dateien:
     - **Code-Beispiel_bert.py**: Beispiel für die Verwendung eines vortrainierten Modells **`deepset/gelectra-base-germanquad`**. Dieses Modell ist auf [Hugging Face verfügbar](https://huggingface.co/deepset/gelectra-base-germanquad)
