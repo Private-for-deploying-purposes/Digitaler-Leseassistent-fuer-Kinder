@@ -48,7 +48,7 @@ Rouah Abdul Jawad
     - **model fine tuning.py**: Hier wird das Modell mit dem SQuAD-Datensatz feinabgestimmt.
     - **testing fine tuned model.py**: Wird verwendet, um das feinabgestimmte Modell zu testen.
 
-- **.gitattributes**: Diese Datei trackt eine große Datei, die nicht hochgeladen werden kann.
+- **.gitattributes**: Diese Datei trackt eine große Datei, die nicht normalerweise auf github hochgeladen werden kann.
 
 - **Aufgaben**: Enthält die Aufgabenverteilung innerhalb unseres Teams.
 
