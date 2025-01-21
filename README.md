@@ -36,7 +36,7 @@ Rouah Abdul Jawad
   - **gifs**: Enthält GIFs für die Website.
 
   - **history**: Dieser Ordner enthält vier Dateien:
-    - **Code-Beispiel_bert.py**: Beispiel für die Verwendung eines vortrainierten Modells **`deepset/gelectra-base-germanquad`**.
+    - **Code-Beispiel_bert.py**: Beispiel für die Verwendung eines vortrainierten Modells **`deepset/gelectra-base-germanquad`**. Dieses Modell ist auf [Hugging Face verfügbar](https://huggingface.co/deepset/gelectra-base-germanquad)
     - **worteinteilung.py**: Ein Skript zur Wortaufteilung.
     - **grundwortschatz.txt**: Die Ursprungsversion von **grundwortschatz2.txt**, die eine Liste schwieriger Wörter enthält.
     - **schwierigeWörter_mit_NER_CodeBeispiel.py**: Beispielcode zur Worterkennung mit Named Entity Recognition (NER).
