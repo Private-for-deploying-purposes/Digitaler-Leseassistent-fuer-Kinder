@@ -61,3 +61,25 @@ Rouah Abdul Jawad
 - **grundwortschatz2.txt**: Die erweiterte Version der Datei **grundwortschatz.txt**, die zusätzliche schwierige Wörter enthält.
 
 
+
+
+
+## Ausführung der Website (app.py)
+
+### Anforderungen:
+- Python
+- Streamlit: `pip install streamlit`
+- Streamlit Lottie: `pip install streamlit_lottie`
+- SpeechRecognition: `pip install SpeechRecognition`
+- Transformers: `pip install transformers`
+- Google Translate (Version 4.0.0-rc1): `pip install googletrans==4.0.0-rc1`
+- Torch: `pip install torch`
+- PyAudio: `pip install pyaudio`
+
+### Um die Website zu starten, gebe folgendes im Terminal ein:
+
+```bash
+python -m streamlit run app.py
+```
+
+> Hinweis: `python -m` ist optional, falls Streamlit nicht als globale Variable definiert ist.
