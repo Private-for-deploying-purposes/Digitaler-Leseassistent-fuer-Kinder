@@ -3,7 +3,7 @@ Welche Aufgaben Wir machen müssen und wer sich was anschaut
 1. UI (Rouah)
 2. Datensammlung (evtl. auch Vorbereitung) (Tim)
 3. Backend Erkennung (Tim)
-4. Backend Vorschlag (Tim, Alex) (für schwierige Würter erkennen (NER))
+4. Backend Vorschlag (Alex) (für schwierige Würter erkennen (NER))
 5. Backend Vorschlag (Mehmet) (für fragen beantworten (openai/bert))
 ---
 5. Verbinden von backend und frontend (alle ihren Teil)
