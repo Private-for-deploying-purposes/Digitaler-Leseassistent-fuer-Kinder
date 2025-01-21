@@ -20,7 +20,7 @@ Um das umzusetzen, nutzen wir moderne NLP-Technologien wie Named Entity Recognit
 
 Gruppenmitglieder:
 
-Alexander Rohr:
+Alexander Rohr: 1533656
 
 Tim Stelzner: 3482360
 
