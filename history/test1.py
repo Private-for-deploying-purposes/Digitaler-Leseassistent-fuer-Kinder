@@ -16,7 +16,7 @@ ner_pipeline = pipeline("ner", model="dbmdz/bert-base-german-cased", aggregation
 # Deutsche Stoppwörter laden
 german_stopwords = set(stopwords.words("german"))
 
-# Zusätzliche häufige Wörter, die ignoriert werden sollen
+# Zusätzliche Wörter(Grundwortschatz2), die ignoriert werden sollen
 def load_grundwortschatz(file_path):
     try:
         with open(file_path, "r", encoding="utf-8") as f:
