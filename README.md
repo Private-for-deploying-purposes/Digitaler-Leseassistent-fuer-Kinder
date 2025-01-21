@@ -27,30 +27,37 @@ Rouah Abdul Jawad
 
 
 
-Abschnitt Worteinteilung
+## Informationen zu den Dateien
 
-Da die Kinder in der Lage sein sollten bestimmte Grundwörter zu verstehen und es einen großen Aufwand für die Webseite jedes Wort zu erklären, muss davon auszugehen sein, dass die Kinder einige Wörter kennen. Diese Liste muss erstmals gefunden werden. Dies stellte zuerst ein Problem dar, da es nicht viele Listen online zur Verfügung stehen, die nach Klassenlevel oder nach Sprachlevel (A1, A2, B1 etc.). Was jedoch online zur Verfügung steht ist eine Liste des Landes NRW zum Grundwortschatz im deutschen. Ein Problem jedoch bei dieser Liste ist, dass diese nicht alle Formen eines Wortes haben. So ist zum Beispiel bei Nomen nur die Nominativ Singular Form vorhanden und bei Verben nur der Singular plural Präsenz vorhanden, wie zum Beispiel „lesen“.
-Erstmal werden die Wörter aus dem PDF in eine Text Datei eingefügt und mittels eines Textsprunges getrennt. Die Textdatei wird dann mittels ChatGPT um die anderen Wortformen erweitert. Diese daraus resultierende Textdatei besitzt 1600  anstelle von ursprünglichen 533 Wörtern und ist größtenteils vollständig mit allen Formen der Grundwörtern.
-Danach wird ein Programm geschrieben welches die Aufgabe hat Wörter aus einem Text in 3 Listen einzuteilen. Die 3 Listen sind: Grundwörter, Wörter die in der Textdatei vorhanden sind, Andere Wörter, Wörter die nicht im Grundtext stehen, jedoch in einem Onlinelexikon stehen, und sonstige Wörter, Wörter die weder im Grundtext noch im Online Lexikon stehen. Um dies umzusetzen wird ein String eines Textes verwendet, dieser wird in die einzelnen Wörter zerlegt und in eine Liste eingefügt, indem die Wörter zwischen den Leerzeichen getrennt werden. Zusätzlich werden nur Buchstaben die den Char-value von deutschen Klein und Großbuchstaben haben(). Daraufhin werden die Wörter in Kleinbuchstaben transformiert und mit der Textdatei verglichen, die auch in Kleinbuchstaben transformiert werden. Dies ist notwendig da beim Vergleich zwischen zwei Wörtern/Strings diese den exakt gleichen Wert haben. Die daraus resultierenden Wörter werden daraufhin in die 3 Listen eingeteilt. 
+- **Ordner:**
 
-In der Anwendung der App wird in Schritt 4 werden die verschiedenen Funktionen definiert die zuvor beschrieben wurden. Zuerst wird die Grundtext Datei geladen, damit die schwierigen Wörter gefunden werden können, in diesem Fall sind schwere Wörter alle Wörter die nicht im Grundwörter Textdatei stehen. Die nächsten 2 Funktionen extrahieren die Bedeutungen von einem Wort, falls die Bedeutung von einem Wort nicht stehen, werden die grammatikalischen Merkmale von einem Wort wieder gegeben. Falls diese auch nicht dasteht wird der gesamte Text wiedergegeben. In Schritt 5 wird der der Input Text alle Zeichen entfernt die keine deutschen Buchstaben  oder Leerzeichen sind. Die Wörter werden dann nach der Entfernung aller Zeichen werden alle schwierigen Wörter nach deren Bedeutungen oder grammatikalischen Merkmale überprüft. Sollte keines der beiden gefunden werden, werden die Wörter nochmal mit anfängende Klein- und Großbuchstaben untersucht. Die schwierigen Wörter werden im originellen Text dann Rot markiert. Die Bedeutungen und Grammatikalischen Merkmale werden daraufhin unterhalb des originalen Inputs eingefügt.
+  - **distilbert-qa**: Enthält das trainierte Modell. Um das Modell zu trainieren, muss die Datei im Ordner **"training model" > "model fine tuning"** ausgeführt werden. Dabei wird das **`distilbert-base-uncased`**-Modell mit dem **SQuAD-Datensatz** trainiert. Das Modell ist auch auf [Hugging Face verfügbar](https://huggingface.co/mxhmxt/distilbert-qa-digital-reading-assistant-for-children/tree/main).
+  
+  - **gifs**: Enthält GIFs für die Website.
 
-Abschnitt Worterkennung mithilfe von NER
+  - **history**: Dieser Ordner enthält vier Dateien:
+    - **Code-Beispiel_bert.py**: Beispiel für die Verwendung eines vortrainierten Modells **`deepset/gelectra-base-germanquad`**.
+    - **grundwortschatz.txt**: Die Ursprungsversion von **grundwortschatz2.txt**, die eine Liste schwieriger Wörter enthält.
+    - **schwierigeWörter_mit_NER_CodeBeispiel.py**: Beispielcode zur Worterkennung mit Named Entity Recognition (NER).
+    - **test1.py**: Überprüft, ob Wörter in der Liste der schwierigen Wörter enthalten sind und führt danach eine NER-Analyse durch.
+  
+  - **logs**: Enthält Log-Dateien, die beim Ausführen des Ordners **"training model" > "model fine tuning"** generiert werden.
 
-Wir haben außerdem versucht schwierige Wörter in einem Text mithilfe eines Named Entity Recognition (NER)-Modells zu identifizieren. Die Idee war, ein bestehendes vortrainiertes Modell, das für die deutsche Sprache optimiert ist, zu nutzen, um komplexe oder unbekannte Begriffe zu erkennen und diese anschließend als schwierig zu markieren. Ziel war es, solche Wörter hervorzuheben, damit sie in einem weiteren Schritt für Kinder einfacher erklärt werden können.
-Ein NER-Modell funktioniert, indem es Wörter oder Phrasen in einem Text analysiert und bestimmten Kategorien zuordnet, wie z. B. Personen, Orte oder Organisationen. Es basiert auf einem tiefen neuronalen Netz, das mit großen Textmengen trainiert wurde, um solche Entitäten zu erkennen. In unserem Fall haben wir das vortrainierte Modell „dbmdz/bert-base-german-cased“ verwendet, das speziell für die deutsche Sprache entwickelt wurde. Allerdings ist das Modell nicht darauf ausgelegt, schwierige Wörter zu identifizieren. Stattdessen erkennt es Entitäten, die aus seiner Perspektive von Bedeutung sind, was in vielen Fällen nicht mit unserer Zielsetzung übereinstimmt.
-Um das Modell auf unsere Anforderungen anzupassen, haben wir eine Filterlogik entwickelt, die einfache und häufig vorkommende Wörter herausfiltert. Hierfür haben wir einen Grundwortschatz verwendet, der Begriffe enthält, die als leicht verständlich gelten. Wörter, die nicht im Grundwortschatz vorkommen, und eine gewisse Länge überschreiten, wurden als potenziell schwierig eingestuft. Das NER-Modell sollte in diesem Prozess helfen, relevante Wörter im Text hervorzuheben, die anschließend durch unsere Filterlogik weiterverarbeitet wurden.
-Leider hat dieser Ansatz aufgrund mehrerer Probleme nicht wie erhofft funktioniert. Zum einen ist das NER-Modell nicht speziell darauf trainiert, schwierige Wörter zu erkennen. Es liefert stattdessen oft Entitäten, die für unsere Aufgabe irrelevant sind, wie Eigennamen oder häufig vorkommende Begriffe, die keine besondere Schwierigkeit darstellen. Zum anderen produziert das Modell manchmal unvollständige Tokens, beispielsweise durch die Zerstückelung von Wörtern, was die weitere Verarbeitung erschwert.
-Ein Problem war die Abhängigkeit von der Filterlogik. Obwohl der Grundwortschatz dazu beiträgt, einfache Wörter auszuschließen, fehlen klare Kriterien dafür, was ein schwieriges Wort ausmacht. Schwierigkeit ist subjektiv und hängt von der Zielgruppe ab. Wörter, die für Kinder unbekannt sind, könnten in einem anderen Kontext als einfach gelten.
+  - **training model**: Dieser Ordner enthält die folgenden Dateien:
+    - **evaluation.py**: Wird verwendet, um die Leistung des trainierten Modells zu bewerten.
+    - **model fine tuning.py**: Hier wird das Modell mit dem SQuAD-Datensatz feinabgestimmt.
+    - **testing fine tuned model.py**: Wird verwendet, um das feinabgestimmte Modell zu testen.
 
-Abschnitt Entwicklung der Benutzeroberfläche (UI)
+  - **.gitattributes**: Diese Datei trackt eine große Datei, die nicht hochgeladen werden kann.
 
-Im Rahmen unseres Projekts wurde eine benutzerfreundliche und interaktive Oberfläche entworfen, die speziell auf die Bedürfnisse junger Leserinnen und Leser zugeschnitten ist. Dabei stand im Vordergrund, eine intuitive Navigation und ein ansprechendes Design zu schaffen, das alle Funktionalitäten des Tools wirkungsvoll unterstützt.
+  - **Aufgaben**: Enthält die Aufgabenverteilung innerhalb unseres Teams.
 
-Um eine dynamische und leicht zugängliche Webanwendung bereitzustellen, wurde die Python-Bibliothek Streamlit eingesetzt. Die Oberfläche wurde in zwei Hauptseiten aufgeteilt: eine Startseite und eine Wörter-Entdecker-Seite. Auf der Startseite werden die Kinder durch eine farbenfrohe Grafik und verspielte Animationen empfangen. Zudem wurde dort ein großer Button mit dem Titel „Los geht’s!“ eingebunden, über den direkt zur Funktionsseite gewechselt werden kann. Diese Gestaltung hat das Ziel, Kinder von Beginn an einzubinden und ihnen den Einstieg in die App zu erleichtern.
+  - **Readme.md**: Diese Datei.
 
-Für die visuelle Umsetzung kamen CSS-Styling und Lottie-Animationen zum Einsatz. Die Wahl einer hellen Gelb- und Grüntönung verleiht der Oberfläche eine positive, lernfreundliche Atmosphäre. Die Navigation erfolgt über eine feststehende Seitenleiste, die einen raschen Wechsel zwischen Startseite und Wörter-Entdecker ermöglicht. Dabei wurden Hover-Effekte und Farbverläufe eingebaut, um einen spielerischen Zugang zu schaffen und die Interaktion kindgerecht zu gestalten.
+  - **worteinteilung.py**: Ein Skript zur Wortaufteilung.
 
-Auf der Wörter-Entdecker-Seite wurden wesentliche Funktionen zur Textanalyse integriert. Kinder können hier einen beliebigen Text in ein Eingabefeld einfügen oder über Spracherkennung einsprechen. Anschließend werden schwierig erscheinende Wörter innerhalb des Textes automatisch erkannt und farblich hervorgehoben. Zusätzlich besteht die Möglichkeit, zu jedem dieser schwierigen Begriffe eine kurze Erklärung abzurufen, sodass unbekannte Wörter unmittelbar verständlich werden. Ein weiterer Abschnitt namens „Fragen beantworten“ erweitert die Funktionalität, indem Nutzerinnen und Nutzer gezielte Fragen zu ihrem Text stellen können. Hierbei wurde ein Button eingefügt, der eine entsprechende Fragefunktion aufruft. Besondere Beachtung wurde auf eine leichte Bedienbarkeit gelegt, weshalb die Schaltflächen groß und farbenfroh gestaltet sind. 
+  - **app.py**: Die Streamlit-basierte Webanwendung.
 
-Insgesamt bildet die hier beschriebene Benutzeroberfläche eine zentrale Komponente des digitalen Leseassistenten, da sie den Zugang zu den wichtigen Bausteinen – Worterkennung, Textanalyse und Fragenbeantwortung – vermittelt. Durch die Kombination aus ansprechendem Design und einer intuitiven Bedienung werden Kinder dazu motiviert, aktiv mit dem Tool zu interagieren und auf spielerische Weise ihre Lesekompetenz zu stärken.
+  - **grundwortschatz2.txt**: Die erweiterte Version der Datei **grundwortschatz.txt**, die zusätzliche schwierige Wörter enthält.
+
+
