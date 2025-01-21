@@ -1,0 +1,15 @@
+Welche Aufgaben Wir machen müssen und wer sich was anschaut
+
+1. UI (Rouah)
+2. Datensammlung (evtl. auch Vorbereitung) (Tim)
+3. Backend Erkennung (Tim)
+4. Backend Vorschlag (Tim, Alex) (für schwierige Würter erkennen (NER))
+5. Backend Vorschlag (Mehmet) (für fragen beantworten (openai/bert))
+---
+5. Verbinden von backen und frontend (alle ihren Teil)
+6. Testen (alle ihren Teil)
+---
+7. Präsentation (alle ihren Teil) 
+8. Report (Rouah [1 Entwicklung der Benutzeroberfläche],Alex [2 Worterkennung mithilfe von NER], Tim [3 Worteinteilung], Mehmet [4 SQuAD-Dataset (Stanford Question
+Answering Dataset),  5 DistilBERT, 6 Modell-Training und Evaluation])
+9. Erklärung für die Ausführung des Codes (alle ihren Teil) 
