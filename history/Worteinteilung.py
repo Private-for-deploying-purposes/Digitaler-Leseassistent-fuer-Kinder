@@ -86,7 +86,7 @@ def textcheck(text):
     Sonstige = []
 
     for i in liste:
-        if check_grundwort(i, grundwortschatz_path="grundwortschatz2.txt") == True:
+        if check_grundwort(i, grundwortschatz_path="../grundwortschatz2.txt") == True:
             Grundliste.append(i)
         else:
             Andereliste.append(i)
