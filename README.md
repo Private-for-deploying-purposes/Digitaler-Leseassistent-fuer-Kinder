@@ -41,23 +41,23 @@ Rouah Abdul Jawad
     - **schwierigeWörter_mit_NER_CodeBeispiel.py**: Beispielcode zur Worterkennung mit Named Entity Recognition (NER).
     - **test1.py**: Überprüft, ob Wörter in der Liste der schwierigen Wörter enthalten sind und führt danach eine NER-Analyse durch.
   
-  - **logs**: Enthält Log-Dateien, die beim Ausführen des Ordners **"training model" > "model fine tuning"** generiert werden.
+  - **logs**: Enthält Log-Dateien, die beim Ausführen der Datei **"training model" > "model fine tuning"** generiert werden.
 
   - **training model**: Dieser Ordner enthält die folgenden Dateien:
     - **evaluation.py**: Wird verwendet, um die Leistung des trainierten Modells zu bewerten.
     - **model fine tuning.py**: Hier wird das Modell mit dem SQuAD-Datensatz feinabgestimmt.
     - **testing fine tuned model.py**: Wird verwendet, um das feinabgestimmte Modell zu testen.
 
-  - **.gitattributes**: Diese Datei trackt eine große Datei, die nicht hochgeladen werden kann.
+- **.gitattributes**: Diese Datei trackt eine große Datei, die nicht hochgeladen werden kann.
 
-  - **Aufgaben**: Enthält die Aufgabenverteilung innerhalb unseres Teams.
+- **Aufgaben**: Enthält die Aufgabenverteilung innerhalb unseres Teams.
 
-  - **Readme.md**: Diese Datei.
+- **Readme.md**: Diese Datei.
 
-  - **worteinteilung.py**: Ein Skript zur Wortaufteilung.
+- **worteinteilung.py**: Ein Skript zur Wortaufteilung.
 
-  - **app.py**: Die Streamlit-basierte Webanwendung.
+- **app.py**: Die Streamlit-basierte Webanwendung.
 
-  - **grundwortschatz2.txt**: Die erweiterte Version der Datei **grundwortschatz.txt**, die zusätzliche schwierige Wörter enthält.
+- **grundwortschatz2.txt**: Die erweiterte Version der Datei **grundwortschatz.txt**, die zusätzliche schwierige Wörter enthält.
 
 
