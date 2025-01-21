@@ -13,7 +13,7 @@ def load_grundwortschatz(file_path):
 
 
 # Teil 4: Check Grundwort
-def check_grundwort(word, grundwortschatz_path="grundwortschatz2.txt"):
+def check_grundwort(word, grundwortschatz_path="../grundwortschatz2.txt"):
     grundwortschatz = load_grundwortschatz(grundwortschatz_path)
     
     if word.lower() in grundwortschatz:
