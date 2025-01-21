@@ -51,8 +51,9 @@ Rouah Abdul Jawad
 - **.gitattributes**: Diese Datei trackt eine große Datei, die nicht normalerweise auf github hochgeladen werden kann.
 
 -  **Animations -***: Das sind die Animationen für die Website
--  
+
 - **Kids reading books.json**: Das ist eine Animationen für die Website
+
 - **Aufgaben**: Enthält die Aufgabenverteilung innerhalb unseres Teams.
 
 - **Readme.md**: Diese Datei.
