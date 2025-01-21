@@ -144,3 +144,14 @@ python "training model/testing fine tuned model.py"
 python "history/Worteinteilung.py"
 ```
 > Hinweis: Stelle sicher, dass du die richtigen Python-Pakete installiert hast, du im richtigen directory bist und die Grundwortschatz im richtigen Ordner ist.
+>
+
+## Ausführung ´schwierigeWörter_mit_NER_Code_Beispiel` im "history"-Ordner"
+### Anforderungen:
+
+> Python 3.8 oder höher
+> Benötigte Python-Bibliotheken:
+> Streamlit: pip install streamlit
+> Transformers: pip install transformers
+> NLTK: pip install nltk
+> Requests: pip install requests
