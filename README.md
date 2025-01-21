@@ -37,6 +37,7 @@ Rouah Abdul Jawad
 
   - **history**: Dieser Ordner enthält vier Dateien:
     - **Code-Beispiel_bert.py**: Beispiel für die Verwendung eines vortrainierten Modells **`deepset/gelectra-base-germanquad`**.
+    - **worteinteilung.py**: Ein Skript zur Wortaufteilung.
     - **grundwortschatz.txt**: Die Ursprungsversion von **grundwortschatz2.txt**, die eine Liste schwieriger Wörter enthält.
     - **schwierigeWörter_mit_NER_CodeBeispiel.py**: Beispielcode zur Worterkennung mit Named Entity Recognition (NER).
     - **test1.py**: Überprüft, ob Wörter in der Liste der schwierigen Wörter enthalten sind und führt danach eine NER-Analyse durch.
@@ -54,7 +55,7 @@ Rouah Abdul Jawad
 
 - **Readme.md**: Diese Datei.
 
-- **worteinteilung.py**: Ein Skript zur Wortaufteilung.
+
 
 - **app.py**: Die Streamlit-basierte Webanwendung.
 
