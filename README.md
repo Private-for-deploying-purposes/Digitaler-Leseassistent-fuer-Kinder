@@ -50,6 +50,8 @@ Rouah Abdul Jawad
 
 - **.gitattributes**: Diese Datei trackt eine große Datei, die nicht normalerweise auf github hochgeladen werden kann.
 
+-  **Animations***: DAs sind die Animationen für die Website
+
 - **Aufgaben**: Enthält die Aufgabenverteilung innerhalb unseres Teams.
 
 - **Readme.md**: Diese Datei.
