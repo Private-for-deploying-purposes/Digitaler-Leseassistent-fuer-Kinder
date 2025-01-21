@@ -151,7 +151,7 @@ python "history/Worteinteilung.py"
 
 - Python 3.8 oder höher
 - Benötigte Python-Bibliotheken:
-- Streamlit: pip install streamlit
-- Transformers: pip install transformers
-- NLTK: pip install nltk
-- Requests: pip install requests
+- Streamlit: `pip install streamlit`
+- Transformers: `pip install transformers`
+- NLTK: `pip install nltk`
+- Requests: `pip install requests`
