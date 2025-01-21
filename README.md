@@ -20,10 +20,13 @@ Um das umzusetzen, nutzen wir moderne NLP-Technologien wie Named Entity Recognit
 
 Gruppenmitglieder:
 
-Alexander Rohr
-Tim Stelzner
-Mehmet Marijanovic
-Rouah Abdul Jawad
+Alexander Rohr:
+
+Tim Stelzner: 3482360
+
+Mehmet Marijanovic: 3544801    
+
+Rouah Abdul Jawad: 5382671 
 
 
 
@@ -33,7 +36,6 @@ Rouah Abdul Jawad
 
   - **distilbert-qa**: Enthält das trainierte Modell. Um das Modell zu trainieren, muss die Datei im Ordner **"training model" > "model fine tuning"** ausgeführt werden. Dabei wird das **`distilbert-base-uncased`**-Modell mit dem **SQuAD-Datensatz** trainiert. Das Modell ist auch auf [Hugging Face verfügbar](https://huggingface.co/mxhmxt/distilbert-qa-digital-reading-assistant-for-children/tree/main).
   
-  - **gifs**: Enthält GIFs für die Website.
 
   - **history**: Dieser Ordner enthält vier Dateien:
     - **Code-Beispiel_bert.py**: Beispiel für die Verwendung eines vortrainierten Modells **`deepset/gelectra-base-germanquad`**. Dieses Modell ist auf [Hugging Face verfügbar](https://huggingface.co/deepset/gelectra-base-germanquad)
@@ -50,6 +52,10 @@ Rouah Abdul Jawad
     - **testing fine tuned model.py**: Wird verwendet, um das feinabgestimmte Modell zu testen.
 
 - **.gitattributes**: Diese Datei trackt eine große Datei, die nicht normalerweise auf github hochgeladen werden kann.
+
+-  **Animations -***: Das sind die Animationen für die Website
+
+- **Kids reading books.json**: Das ist eine Animationen für die Website
 
 - **Aufgaben**: Enthält die Aufgabenverteilung innerhalb unseres Teams.
 
@@ -144,3 +150,14 @@ python "training model/testing fine tuned model.py"
 python "history/Worteinteilung.py"
 ```
 > Hinweis: Stelle sicher, dass du die richtigen Python-Pakete installiert hast, du im richtigen directory bist und die Grundwortschatz im richtigen Ordner ist.
+>
+
+## Ausführung ´schwierigeWörter_mit_NER_Code_Beispiel` im "history"-Ordner"
+### Anforderungen:
+
+- Python 3.8 oder höher
+- Benötigte Python-Bibliotheken:
+- Streamlit: `pip install streamlit`
+- Transformers: `pip install transformers`
+- NLTK: `pip install nltk`
+- Requests: `pip install requests`
